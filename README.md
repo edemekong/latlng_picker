@@ -3,7 +3,7 @@
 A beautiful Flutter package that provides an interactive location latitude and longitude picker with physics-based animations for Google Maps. Pick locations with style using an animated pin that bounces and elevates with realistic physics.
 
 <div align="center">
-  <img src="https://github.com/edemekong/latlng_picker/blob/master/presentation/screenshot.gif?raw=true" alt="LatLng Picker Demo" width="300"/>
+  <img src="https://raw.githubusercontent.com/edemekong/map_latlng_picker/refs/heads/master/presentation/screenshot.gif" alt="LatLng Picker Demo" width="300"/>
 </div>
 
 ## What is it?
