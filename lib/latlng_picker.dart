@@ -27,7 +27,7 @@
 /// ```
 ///
 /// Author: Paul Jeremiah (@edeme_kong)
-library latlng_picker;
+library map_latlng_picker;
 
 export 'src/location_picker.dart';
 export 'src/animated_pin.dart';

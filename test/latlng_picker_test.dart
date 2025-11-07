@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:latlng_picker/src/animated_pin.dart';
-import 'package:latlng_picker/src/location_picker.dart';
-import 'package:latlng_picker/src/pin_state.dart';
+import 'package:map_latlng_picker/src/animated_pin.dart';
+import 'package:map_latlng_picker/src/location_picker.dart';
+import 'package:map_latlng_picker/src/pin_state.dart';
 
 void main() {
   group('PinState', () {

@@ -32,7 +32,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  latlng_picker: ^1.0.0
+  map_latlng_picker: ^1.0.0
   google_maps_flutter: ^2.5.0
 ```
 
@@ -43,7 +43,7 @@ Simply wrap your `GoogleMap` widget with `LatLngLocationPicker`:
 ```dart
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:latlng_picker/latlng_picker.dart';
+import 'package:map_latlng_picker/map_latlng_picker.dart';
 
 class LocationPickerScreen extends StatefulWidget {
   @override
@@ -262,4 +262,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-# latlng_picker
+# map_latlng_picker
