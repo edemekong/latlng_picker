@@ -6,7 +6,7 @@ repository: https://github.com/edemekong/latlng_picker
 issue_tracker: https://github.com/edemekong/latlng_picker/issues
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.7.0
   flutter: ">=1.17.0"
 
 dependencies:
