@@ -283,7 +283,7 @@ class _AnimatedLocationPinState extends State<AnimatedLocationPin>
                 width: shadowWidth,
                 height: shadowHeight,
                 decoration: BoxDecoration(
-                  color: widget.shadowColor.withOpacity(shadowOpacity),
+                  color: widget.shadowColor.withValues(alpha: shadowOpacity),
                   borderRadius: BorderRadius.circular(100),
                 ),
               ),
@@ -318,7 +318,7 @@ class _AnimatedLocationPinState extends State<AnimatedLocationPin>
             width: widget.isElevated ? stickWidth * 1.2 : stickWidth * 0.8,
             height: widget.isElevated ? stickWidth * 0.4 : stickWidth * 0.25,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(widget.isElevated ? 0.3 : 0.2),
+              color: Colors.black.withValues(alpha:widget.isElevated ? 0.3 : 0.2),
               borderRadius: BorderRadius.circular(100),
             ),
           ),

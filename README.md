@@ -120,6 +120,33 @@ LatLngLocationPicker(
 )
 ```
 
+### Simplified Pin Customization with AnimatePinData
+
+```dart
+LatLngLocationPicker(
+  enabled: true,
+  pinData: AnimatePinData(
+    color: Colors.blue,
+    innerColor: Colors.white,
+    stickColor: Colors.blueAccent,
+    size: 50,
+    stickHeight: 25,
+    stickBorderRadius: 4.0,
+    shadowColor: Colors.black54,
+    shadowDistance: 10.0,
+  ),
+  onLocationPicked: (location) {
+    // Handle picked location
+  },
+  child: GoogleMap(
+    initialCameraPosition: CameraPosition(
+      target: LatLng(37.7749, -122.4194),
+      zoom: 14,
+    ),
+  ),
+)
+```
+
 ## Parameters
 
 ### LatLngLocationPicker
@@ -130,9 +157,26 @@ LatLngLocationPicker(
 | `controller`        | `LatLngLocationPickerController?` | `null`       | Controller to enable/disable picker programmatically              |
 | `onLocationPicked`  | `OnLatLngLocationPicked?`         | `null`       | Callback fired when user releases the map                         |
 | `pinWidget`         | `Widget?`                         | `null`       | Custom pin widget (uses AnimatedLocationPin by default)           |
+| `pinData`           | `AnimatePinData?`                 | `null`       | Pin customization data (alternative to pinWidget)                 |
 | `pinOffset`         | `double`                          | `50`         | Vertical offset from center (useful for pins with bottom pointer) |
 | `enabled`           | `bool`                            | `false`      | Whether location picker is enabled by default                     |
 | `useHapticFeedback` | `bool`                            | `true`       | Enable haptic feedback on pan start/end                           |
+
+### AnimatePinData
+
+| Parameter           | Type        | Default                       | Description                                   |
+| ------------------- | ----------- | ----------------------------- | --------------------------------------------- |
+| `state`             | `PinState?` | `null`                        | Advanced mode: Control pin state              |
+| `isElevated`        | `bool`      | `false`                       | Simple mode: Whether pin is elevated          |
+| `color`             | `Color`     | **required**                  | Main circle color                             |
+| `innerColor`        | `Color`     | **required**                  | Inner dot color                               |
+| `stickColor`        | `Color?`    | `null`                        | Stick color (defaults to main color)          |
+| `stickBorderRadius` | `double`    | `4.0`                         | Border radius of the stick                    |
+| `shadowColor`       | `Color`     | **required**                  | Shadow color                                  |
+| `size`              | `double`    | `40.0`                        | Pin size (circle diameter)                    |
+| `stickHeight`       | `double`    | `20.0`                        | Height of the stick                           |
+| `shadowDistance`    | `double`    | `10.0`                        | Shadow distance when elevated (advanced mode) |
+| `duration`          | `Duration`  | `Duration(milliseconds: 300)` | Animation duration                            |
 
 ### AnimatedLocationPin
 
@@ -239,6 +283,33 @@ LatLngLocationPicker(
 )
 ```
 
+### Example 4: Using AnimatePinData
+
+```dart
+LatLngLocationPicker(
+  enabled: true,
+  pinData: AnimatePinData(
+    color: Colors.green,
+    innerColor: Colors.white,
+    stickColor: Colors.greenAccent,
+    size: 55,
+    stickHeight: 28,
+    stickBorderRadius: 6.0,
+    shadowColor: Colors.black45,
+    shadowDistance: 12.0,
+  ),
+  onLocationPicked: (location) {
+    print('Picked: ${location.latitude}, ${location.longitude}');
+  },
+  child: GoogleMap(
+    initialCameraPosition: CameraPosition(
+      target: LatLng(37.7749, -122.4194),
+      zoom: 14,
+    ),
+  ),
+)
+```
+
 ## Features
 
 - Smooth physics-based animations  
@@ -254,6 +325,12 @@ LatLngLocationPicker(
 
 **Paul Jeremiah**  
 Twitter: [@edeme_kong](https://x.com/edeme_kong)
+
+## Support
+
+If you find this package helpful, consider buying me a coffee! ☕
+
+<a href="https://buymeacoffee.com/edemekong" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## License
 

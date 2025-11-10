@@ -563,5 +563,151 @@ void main() {
 
       expect(find.byType(LatLngLocationPicker), findsOneWidget);
     });
+
+    testWidgets('uses AnimatePinData for pin customization',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LatLngLocationPicker(
+              enabled: true,
+              pinData: const AnimatePinData(
+                color: Colors.blue,
+                innerColor: Colors.yellow,
+                stickColor: Colors.green,
+                size: 55,
+                stickHeight: 28,
+                stickBorderRadius: 6.0,
+                shadowColor: Colors.black45,
+                shadowDistance: 12.0,
+              ),
+              child: GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(0, 0),
+                  zoom: 10,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(LatLngLocationPicker), findsOneWidget);
+      expect(find.byType(AnimatedLocationPin), findsOneWidget);
+    });
+
+    testWidgets('updates enabled state dynamically',
+        (WidgetTester tester) async {
+      bool enabled = false;
+
+      await tester.pumpWidget(
+        StatefulBuilder(
+          builder: (context, setState) {
+            return MaterialApp(
+              home: Scaffold(
+                body: Column(
+                  children: [
+                    Expanded(
+                      child: LatLngLocationPicker(
+                        enabled: enabled,
+                        child: GoogleMap(
+                          initialCameraPosition: const CameraPosition(
+                            target: LatLng(0, 0),
+                            zoom: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          enabled = !enabled;
+                        });
+                      },
+                      child: const Text('Toggle'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+
+      expect(find.byType(AnimatedLocationPin), findsNothing);
+
+      // Toggle enabled
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(find.byType(AnimatedLocationPin), findsOneWidget);
+
+      // Toggle back to disabled
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(find.byType(AnimatedLocationPin), findsNothing);
+    });
+  });
+
+  group('AnimatePinData', () {
+    test('creates instance with required parameters', () {
+      const pinData = AnimatePinData(
+        color: Colors.red,
+        innerColor: Colors.white,
+        shadowColor: Colors.black26,
+      );
+
+      expect(pinData.color, Colors.red);
+      expect(pinData.innerColor, Colors.white);
+      expect(pinData.shadowColor, Colors.black26);
+      expect(pinData.size, 40.0);
+      expect(pinData.stickHeight, 20.0);
+      expect(pinData.stickBorderRadius, 4.0);
+      expect(pinData.shadowDistance, 10.0);
+    });
+
+    test('creates instance with all custom parameters', () {
+      const pinData = AnimatePinData(
+        color: Colors.blue,
+        innerColor: Colors.yellow,
+        stickColor: Colors.green,
+        shadowColor: Colors.black45,
+        size: 60.0,
+        stickHeight: 30.0,
+        stickBorderRadius: 8.0,
+        shadowDistance: 15.0,
+        duration: Duration(milliseconds: 500),
+        isElevated: true,
+      );
+
+      expect(pinData.color, Colors.blue);
+      expect(pinData.innerColor, Colors.yellow);
+      expect(pinData.stickColor, Colors.green);
+      expect(pinData.shadowColor, Colors.black45);
+      expect(pinData.size, 60.0);
+      expect(pinData.stickHeight, 30.0);
+      expect(pinData.stickBorderRadius, 8.0);
+      expect(pinData.shadowDistance, 15.0);
+      expect(pinData.duration, const Duration(milliseconds: 500));
+      expect(pinData.isElevated, true);
+    });
+
+    test('has correct default values', () {
+      const pinData = AnimatePinData(
+        color: Colors.red,
+        innerColor: Colors.white,
+        shadowColor: Colors.black26,
+      );
+
+      expect(pinData.isElevated, false);
+      expect(pinData.state, null);
+      expect(pinData.stickColor, null);
+      expect(pinData.stickBorderRadius, 4.0);
+      expect(pinData.size, 40.0);
+      expect(pinData.stickHeight, 20.0);
+      expect(pinData.shadowDistance, 10.0);
+      expect(pinData.duration, const Duration(milliseconds: 300));
+    });
   });
 }

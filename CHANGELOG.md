@@ -1,3 +1,18 @@
+## 1.0.2
+
+* Updated to use `withValues` for color opacity (Flutter 3.27+ compatibility)
+* Updated `google_maps_flutter` dependency to ^2.14.0
+* Improved shadow rendering with better opacity handling
+* Minor performance improvements
+
+## 1.0.1
+
+* Added `AnimatePinData` class for easier pin customization
+* Added `pinData` parameter to `LatLngLocationPicker` for simplified pin configuration
+* Added `didUpdateWidget` lifecycle method to handle dynamic `enabled` property changes
+* Improved pin customization with default values
+* Fixed import statement to use correct package name
+
 ## 1.0.0
 
 * Initial release
@@ -10,3 +25,4 @@
 * Preserves all GoogleMap properties and callbacks
 * Complete documentation with examples
 * Widget tests with 100% pass rate
+
