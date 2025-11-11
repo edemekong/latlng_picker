@@ -11,22 +11,25 @@ class AnimatePinData {
 
   /// Whether the pin is currently elevated (for simple boolean mode)
   /// Ignored if [state] is provided
-  final bool isElevated;
+  final bool? isElevated;
 
   /// Main circle color
-  final Color color;
+  final Color? color;
 
   /// Inner circle color
-  final Color innerColor;
+  final Color? innerColor;
 
   /// Stick color (if null, uses main color)
   final Color? stickColor;
+
+  /// Stick width (if null, calculated as 15% of size)
+  final double? stickWidth;
 
   /// Stick border radius
   final double stickBorderRadius;
 
   /// Shadow color
-  final Color shadowColor;
+  final Color? shadowColor;
 
   /// Pin size (diameter of the circle)
   final double size;
@@ -42,16 +45,17 @@ class AnimatePinData {
 
   const AnimatePinData({
     this.state,
-    this.isElevated = false,
-    required this.color,
-    required this.innerColor,
+    this.isElevated,
+    this.color = Colors.red,
+    this.innerColor,
     this.stickColor,
+    this.stickWidth,
     this.stickBorderRadius = 4.0,
-    required this.shadowColor,
+    this.shadowColor,
     this.size = 40.0,
     this.stickHeight = 20.0,
-    this.shadowDistance = 10.0,
-    this.duration = const Duration(milliseconds: 300),
+    this.shadowDistance = 15.0,
+    this.duration = const Duration(milliseconds: 200),
   });
 }
 
@@ -100,7 +104,17 @@ class LatLngLocationPicker extends StatefulWidget {
 
   final AnimatePinData? pinData;
 
-  const LatLngLocationPicker({super.key, required this.child, this.controller, this.onLocationPicked, this.pinWidget, this.pinOffset = 50, this.enabled = false, this.useHapticFeedback = true, this.pinData});
+  const LatLngLocationPicker({
+    super.key,
+    required this.child,
+    this.controller,
+    this.onLocationPicked,
+    this.pinWidget,
+    this.pinOffset = 50,
+    this.enabled = false,
+    this.useHapticFeedback = true,
+    this.pinData,
+  });
 
   @override
   State<LatLngLocationPicker> createState() => _LatLngLocationPickerState();
@@ -127,8 +141,8 @@ class _LatLngLocationPickerState extends State<LatLngLocationPicker> {
   void didUpdateWidget(covariant LatLngLocationPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if(_isEnabled != widget.enabled && oldWidget.enabled != widget.enabled) {
-      if(widget.enabled) {
+    if (_isEnabled != widget.enabled && oldWidget.enabled != widget.enabled) {
+      if (widget.enabled) {
         _enablePicker();
       } else {
         _disablePicker();
@@ -194,10 +208,7 @@ class _LatLngLocationPickerState extends State<LatLngLocationPicker> {
         _GoogleMapWrapper(onCameraMoveStarted: _onCameraMoveStarted, onCameraIdle: _onCameraIdle, child: widget.child),
 
         // Fixed center pin
-        if (_isEnabled)
-          Center(
-            child: Transform.translate(offset: Offset(0, -widget.pinOffset), child: _buildPin()),
-          ),
+        if (_isEnabled) Center(child: Transform.translate(offset: Offset(0, -widget.pinOffset), child: _buildPin())),
       ],
     );
   }
@@ -211,10 +222,11 @@ class _LatLngLocationPickerState extends State<LatLngLocationPicker> {
 
         final AnimatePinData? pinData = widget.pinData;
 
-        final bool isPanning =pinData?.isElevated ?? _isPanning;
-        final PinState? state =pinData?.state;
+        final bool isPanning = pinData?.isElevated ?? _isPanning;
+        final PinState? state = pinData?.state;
         final PinState effectiveState = state ?? (isPanning ? PinState.elevated : PinState.idle);
         final Color stickColor = pinData?.stickColor ?? pinData?.color ?? Colors.red;
+        final double? stickWidth = pinData?.stickWidth;
         final double stickBorderRadius = pinData?.stickBorderRadius ?? 4.0;
         final Color shadowColor = pinData?.shadowColor ?? Colors.black54;
         final double shadowDistance = pinData?.shadowDistance ?? 10.0;
@@ -222,7 +234,7 @@ class _LatLngLocationPickerState extends State<LatLngLocationPicker> {
         final double size = pinData?.size ?? 45.0;
         final double stickHeight = pinData?.stickHeight ?? 22.0;
         final Color color = pinData?.color ?? Colors.red;
-        final Color innerColor = pinData?.innerColor ?? Colors.white; 
+        final Color innerColor = pinData?.innerColor ?? Colors.white;
 
         // Default animated pin
         return AnimatedLocationPin(
@@ -230,6 +242,7 @@ class _LatLngLocationPickerState extends State<LatLngLocationPicker> {
           color: color,
           innerColor: innerColor,
           stickColor: stickColor,
+          stickWidth: stickWidth,
           stickBorderRadius: stickBorderRadius,
           shadowColor: shadowColor,
           size: size,
@@ -259,70 +272,67 @@ class _GoogleMapWrapperState extends State<_GoogleMapWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      widget.child is GoogleMap,
-      'LatLngLocationPicker child must be a GoogleMap widget',
-    );
+    assert(widget.child is GoogleMap, 'LatLngLocationPicker child must be a GoogleMap widget');
 
     if (widget.child is GoogleMap) {
       final googleMap = widget.child as GoogleMap;
 
       return GoogleMap(
-      key: googleMap.key,
-      initialCameraPosition: googleMap.initialCameraPosition,
-      style: googleMap.style,
-      onMapCreated: (controller) {
-        mapController = controller;
-        googleMap.onMapCreated?.call(controller);
-      },
-      gestureRecognizers: googleMap.gestureRecognizers,
-      webGestureHandling: googleMap.webGestureHandling,
-      webCameraControlPosition: googleMap.webCameraControlPosition,
-      webCameraControlEnabled: googleMap.webCameraControlEnabled,
-      compassEnabled: googleMap.compassEnabled,
-      mapToolbarEnabled: googleMap.mapToolbarEnabled,
-      cameraTargetBounds: googleMap.cameraTargetBounds,
-      mapType: googleMap.mapType,
-      minMaxZoomPreference: googleMap.minMaxZoomPreference,
-      rotateGesturesEnabled: googleMap.rotateGesturesEnabled,
-      scrollGesturesEnabled: googleMap.scrollGesturesEnabled,
-      zoomControlsEnabled: googleMap.zoomControlsEnabled,
-      zoomGesturesEnabled: googleMap.zoomGesturesEnabled,
-      liteModeEnabled: googleMap.liteModeEnabled,
-      tiltGesturesEnabled: googleMap.tiltGesturesEnabled,
-      fortyFiveDegreeImageryEnabled: googleMap.fortyFiveDegreeImageryEnabled,
-      myLocationEnabled: googleMap.myLocationEnabled,
-      myLocationButtonEnabled: googleMap.myLocationButtonEnabled,
-      layoutDirection: googleMap.layoutDirection,
-      padding: googleMap.padding,
-      indoorViewEnabled: googleMap.indoorViewEnabled,
-      trafficEnabled: googleMap.trafficEnabled,
-      buildingsEnabled: googleMap.buildingsEnabled,
-      markers: googleMap.markers,
-      polygons: googleMap.polygons,
-      polylines: googleMap.polylines,
-      circles: googleMap.circles,
-      clusterManagers: googleMap.clusterManagers,
-      heatmaps: googleMap.heatmaps,
-      tileOverlays: googleMap.tileOverlays,
-      groundOverlays: googleMap.groundOverlays,
-      onCameraMoveStarted: () {
-        widget.onCameraMoveStarted?.call();
-        googleMap.onCameraMoveStarted?.call();
-      },
-      onCameraMove: (position) {
-        _currentCenter = position.target;
-        googleMap.onCameraMove?.call(position);
-      },
-      onCameraIdle: () async {
-        if (_currentCenter != null) {
-        widget.onCameraIdle?.call(_currentCenter!);
-        }
-        googleMap.onCameraIdle?.call();
-      },
-      onTap: googleMap.onTap,
-      onLongPress: googleMap.onLongPress,
-      cloudMapId: googleMap.cloudMapId,
+        key: googleMap.key,
+        initialCameraPosition: googleMap.initialCameraPosition,
+        style: googleMap.style,
+        onMapCreated: (controller) {
+          mapController = controller;
+          googleMap.onMapCreated?.call(controller);
+        },
+        gestureRecognizers: googleMap.gestureRecognizers,
+        webGestureHandling: googleMap.webGestureHandling,
+        webCameraControlPosition: googleMap.webCameraControlPosition,
+        webCameraControlEnabled: googleMap.webCameraControlEnabled,
+        compassEnabled: googleMap.compassEnabled,
+        mapToolbarEnabled: googleMap.mapToolbarEnabled,
+        cameraTargetBounds: googleMap.cameraTargetBounds,
+        mapType: googleMap.mapType,
+        minMaxZoomPreference: googleMap.minMaxZoomPreference,
+        rotateGesturesEnabled: googleMap.rotateGesturesEnabled,
+        scrollGesturesEnabled: googleMap.scrollGesturesEnabled,
+        zoomControlsEnabled: googleMap.zoomControlsEnabled,
+        zoomGesturesEnabled: googleMap.zoomGesturesEnabled,
+        liteModeEnabled: googleMap.liteModeEnabled,
+        tiltGesturesEnabled: googleMap.tiltGesturesEnabled,
+        fortyFiveDegreeImageryEnabled: googleMap.fortyFiveDegreeImageryEnabled,
+        myLocationEnabled: googleMap.myLocationEnabled,
+        myLocationButtonEnabled: googleMap.myLocationButtonEnabled,
+        layoutDirection: googleMap.layoutDirection,
+        padding: googleMap.padding,
+        indoorViewEnabled: googleMap.indoorViewEnabled,
+        trafficEnabled: googleMap.trafficEnabled,
+        buildingsEnabled: googleMap.buildingsEnabled,
+        markers: googleMap.markers,
+        polygons: googleMap.polygons,
+        polylines: googleMap.polylines,
+        circles: googleMap.circles,
+        clusterManagers: googleMap.clusterManagers,
+        heatmaps: googleMap.heatmaps,
+        tileOverlays: googleMap.tileOverlays,
+        groundOverlays: googleMap.groundOverlays,
+        onCameraMoveStarted: () {
+          widget.onCameraMoveStarted?.call();
+          googleMap.onCameraMoveStarted?.call();
+        },
+        onCameraMove: (position) {
+          _currentCenter = position.target;
+          googleMap.onCameraMove?.call(position);
+        },
+        onCameraIdle: () async {
+          if (_currentCenter != null) {
+            widget.onCameraIdle?.call(_currentCenter!);
+          }
+          googleMap.onCameraIdle?.call();
+        },
+        onTap: googleMap.onTap,
+        onLongPress: googleMap.onLongPress,
+        cloudMapId: googleMap.cloudMapId,
       );
     }
 

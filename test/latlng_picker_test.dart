@@ -664,7 +664,7 @@ void main() {
       expect(pinData.size, 40.0);
       expect(pinData.stickHeight, 20.0);
       expect(pinData.stickBorderRadius, 4.0);
-      expect(pinData.shadowDistance, 10.0);
+      expect(pinData.shadowDistance, 15.0);
     });
 
     test('creates instance with all custom parameters', () {
@@ -672,6 +672,7 @@ void main() {
         color: Colors.blue,
         innerColor: Colors.yellow,
         stickColor: Colors.green,
+        stickWidth: 8.0,
         shadowColor: Colors.black45,
         size: 60.0,
         stickHeight: 30.0,
@@ -684,6 +685,7 @@ void main() {
       expect(pinData.color, Colors.blue);
       expect(pinData.innerColor, Colors.yellow);
       expect(pinData.stickColor, Colors.green);
+      expect(pinData.stickWidth, 8.0);
       expect(pinData.shadowColor, Colors.black45);
       expect(pinData.size, 60.0);
       expect(pinData.stickHeight, 30.0);
@@ -700,14 +702,15 @@ void main() {
         shadowColor: Colors.black26,
       );
 
-      expect(pinData.isElevated, false);
+      expect(pinData.isElevated, null);
       expect(pinData.state, null);
       expect(pinData.stickColor, null);
+      expect(pinData.stickWidth, null);
       expect(pinData.stickBorderRadius, 4.0);
       expect(pinData.size, 40.0);
       expect(pinData.stickHeight, 20.0);
-      expect(pinData.shadowDistance, 10.0);
-      expect(pinData.duration, const Duration(milliseconds: 300));
+      expect(pinData.shadowDistance, 15.0);
+      expect(pinData.duration, const Duration(milliseconds: 200));
     });
   });
 }

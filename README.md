@@ -32,9 +32,44 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  map_latlng_picker: ^1.0.0
-  google_maps_flutter: ^2.5.0
+  map_latlng_picker: ^1.0.3
+  google_maps_flutter: ^2.14.0
 ```
+
+### Google Maps API Key Setup
+
+Before using this package, you need to configure Google Maps API keys for your target platforms:
+
+#### 🌐 Web
+Add to `web/index.html`:
+```html
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE"></script>
+```
+
+#### 🤖 Android
+Add to `android/app/src/main/AndroidManifest.xml` inside `<application>`:
+```xml
+<meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="YOUR_API_KEY_HERE"/>
+```
+
+#### 🍎 iOS
+In `ios/Runner/AppDelegate.swift`:
+```swift
+import GoogleMaps
+
+override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+) -> Bool {
+    GMSServices.provideAPIKey("YOUR_API_KEY_HERE")
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+}
+```
+
+📚 [Get your Google Maps API key](https://console.cloud.google.com/)
 
 ### Basic Usage
 
@@ -171,6 +206,7 @@ LatLngLocationPicker(
 | `color`             | `Color`     | **required**                  | Main circle color                             |
 | `innerColor`        | `Color`     | **required**                  | Inner dot color                               |
 | `stickColor`        | `Color?`    | `null`                        | Stick color (defaults to main color)          |
+| `stickWidth`        | `double?`   | `null`                        | Stick width (defaults to 15% of size)         |
 | `stickBorderRadius` | `double`    | `4.0`                         | Border radius of the stick                    |
 | `shadowColor`       | `Color`     | **required**                  | Shadow color                                  |
 | `size`              | `double`    | `40.0`                        | Pin size (circle diameter)                    |
@@ -187,7 +223,8 @@ LatLngLocationPicker(
 | `color`             | `Color`     | `Colors.red`                  | Main circle color                                |
 | `innerColor`        | `Color`     | `Colors.white`                | Inner dot color                                  |
 | `stickColor`        | `Color?`    | `null`                        | Stick color (defaults to main color)             |
-| `stickBorderRadius` | `double`    | `0`                           | Border radius of the stick                       |
+| `stickWidth`        | `double?`   | `null`                        | Stick width (defaults to 10% of size)            |
+| `stickBorderRadius` | `double`    | `12`                          | Border radius of the stick                       |
 | `shadowColor`       | `Color`     | `Colors.black26`              | Shadow color                                     |
 | `size`              | `double`    | `40`                          | Pin size (circle diameter)                       |
 | `stickHeight`       | `double`    | `20`                          | Height of the stick                              |

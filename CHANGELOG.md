@@ -1,3 +1,11 @@
+## 1.0.3
+
+* Added `stickWidth` parameter to `AnimatedLocationPin` for customizable stick width
+* Added `stickWidth` parameter to `AnimatePinData` for easier customization
+* Updated example app with comprehensive demo
+* Added Google Maps API key setup instructions for all platforms (Web, Android, iOS)
+* Improved documentation with platform-specific configuration guides
+
 ## 1.0.2
 
 * Updated to use `withValues` for color opacity (Flutter 3.27+ compatibility)
